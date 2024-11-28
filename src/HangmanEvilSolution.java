@@ -48,7 +48,11 @@ public class HangmanEvilSolution {
     private ArrayList<Character> updateDisplay(String newOutput){
         ArrayList<Character> updated = new ArrayList<>();
         for (char c : newOutput.toCharArray()){
-            updated.add(c);
+            if (c == '-'){
+                updated.add('_');
+            } else {
+                updated.add(c);
+            }
         }
         return updated;
     }
@@ -82,7 +86,7 @@ public class HangmanEvilSolution {
     // inputs: letter, listOfPositions
     // outputs: String (e.g., "--e--")
     private String createPartialSolution (char letter, ArrayList<Integer> listOfPositions){
-        ArrayList<Character> partialSolution = this.display;
+        ArrayList<Character> partialSolution = new ArrayList<>(this.display);
 
         for (int idx : listOfPositions){ // update partial solution with new letters
             partialSolution.set(idx, letter);

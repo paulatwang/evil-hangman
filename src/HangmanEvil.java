@@ -42,7 +42,7 @@ public class HangmanEvil {
                 incorrectGuesses.add(guess);
             }
         }
-
+        printVictory();
     }
 
 
@@ -60,6 +60,10 @@ public class HangmanEvil {
                 return input.charAt(0);
             }
         }
+    }
+
+    private void printVictory() {
+        System.out.printf("Congrats! The word was %s%n", solution.getPossibleWords().get(0));
     }
 
     private static HashMap<Integer, ArrayList<String>> dictionaryToList(String filename) throws IOException {
