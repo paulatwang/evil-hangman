@@ -18,58 +18,61 @@ public class HangmanEvil {
             wordList = dictionaryToList(filename);
         } catch (IOException e) {
             System.out.printf(
-                    "Couldn't read from the file %s. Verify that you have it in the right place and try running again.",
+                    "Couldn't read from the file %s. Verify that you have it in the right place and try running again. \n",
                     filename);
             e.printStackTrace();
             System.exit(0);
         }
 
-        previousGuesses = new HashSet<>();
-        incorrectGuesses = new TreeSet<>();
-        inputScanner = new Scanner(System.in);
+        this.previousGuesses = new HashSet<>();
+        this.incorrectGuesses = new TreeSet<>();
+        this.inputScanner = new Scanner(System.in);
+
         int randomLength = new Random().nextInt(wordList.size());
-        ArrayList<String> wordSet = wordList.get(randomLength);
-        this.solution = new HangmanEvilSolution(wordSet);
+        this.solution = new HangmanEvilSolution(randomLength, wordList.get(randomLength));
     }
+
 
     public void start(){
         while (!solution.isSolved()){
             char guess = promptForGuess();
             previousGuesses.add(guess);
+            solution.updateGuess(guess);
         }
     }
 
 
-private char promptForGuess() {
-    while (true) {
-        System.out.println("Guess a letter.\n");
-        solution.printProgress();
-        System.out.println("Incorrect guesses:\n" + incorrectGuesses.toString());
-        String input = inputScanner.next();
-        if (input.length() != 1) {
-            System.out.println("Please enter a single character.");
-        } else if (previousGuesses.contains(input.charAt(0))) {
-            System.out.println("You've already guessed that.");
-        } else {
-            return input.charAt(0);
+    private char promptForGuess() {
+        while (true) {
+            System.out.println("Guess a letter.\n");
+            solution.printProgress();
+            System.out.println("Incorrect guesses:\n" + incorrectGuesses.toString());
+            String input = inputScanner.next();
+            if (input.length() != 1) {
+                System.out.println("Please enter a single character.");
+            } else if (previousGuesses.contains(input.charAt(0))) {
+                System.out.println("You've already guessed that.");
+            } else {
+                return input.charAt(0);
+            }
         }
     }
 
-}
+    private static HashMap<Integer, ArrayList<String>> dictionaryToList(String filename) throws IOException {
+        FileInputStream fs = new FileInputStream(filename);
+        Scanner scnr = new Scanner(fs);
 
-private static HashMap<Integer, ArrayList<String>> dictionaryToList(String filename) throws IOException {
-    FileInputStream fs = new FileInputStream(filename);
-    Scanner scnr = new Scanner(fs);
-
-    HashMap<Integer, ArrayList<String>> wordList = new HashMap<>();
-    while (scnr.hasNext()) {
-        String word = scnr.next();
-        int length = word.length();
-        wordList.putIfAbsent(length, new ArrayList<>()); // if no key-value pair exists, add it
-        wordList.get(length).add(word); // add word to int key
+        HashMap<Integer, ArrayList<String>> wordList = new HashMap<>();
+        while (scnr.hasNext()) {
+            String word = scnr.next();
+            int length = word.length();
+            wordList.putIfAbsent(length, new ArrayList<>()); // if no key-value pair exists, add it
+            wordList.get(length).add(word); // add word to int key
         }
-    return wordList;
+        return wordList;
     }
+
+
 
 }
 
