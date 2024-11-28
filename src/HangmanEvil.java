@@ -37,8 +37,12 @@ public class HangmanEvil {
         while (!solution.isSolved()){
             char guess = promptForGuess();
             previousGuesses.add(guess);
-            solution.updateGuess(guess);
+            boolean containsLetter = solution.updateGuess(guess);
+            if (!containsLetter){
+                incorrectGuesses.add(guess);
+            }
         }
+
     }
 
 

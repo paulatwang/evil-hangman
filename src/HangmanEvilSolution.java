@@ -15,25 +15,34 @@ public class HangmanEvilSolution {
         this.display = updateDisplay("_".repeat(WORD_LENGTH));
     }
 
-    public void updateGuess(char guessedLetter){
+    public boolean updateGuess(char guessedLetter){
         // initialize new wordFamily
         HashMap<String, ArrayList<String>> wordFamily = new HashMap<>();
 
-        // fill in wordFamily from possibleWords
+        // check if there are any valid words in possibleWords
+        int numValidWords = 0;
         for (String word: this.possibleWords){
+            // if there are, then add to wordFamily and increment counter
             if (word.contains(Character.toString(guessedLetter))){
                 ArrayList<Integer> letterIndexes = getIndexesOfCharacter(guessedLetter, word);
                 String ps = createPartialSolution(guessedLetter, letterIndexes);
                 wordFamily.putIfAbsent(ps, new ArrayList<>());
                 wordFamily.get(ps).add(word);
+                numValidWords++;
             }
         }
 
-        // update new possibleWords and display
+        // if counter = 0, return without updating
+        if (numValidWords == 0){
+            return false;
+        }
+
+        // otherwise, update new possibleWords and display
         String newSolution = getLongestWordFamily(wordFamily);
         this.display = updateDisplay(newSolution);
         this.possibleWords = wordFamily.get(newSolution);
 
+        return true;
     }
 
     private ArrayList<Character> updateDisplay(String newOutput){
