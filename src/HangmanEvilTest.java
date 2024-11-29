@@ -1,115 +1,114 @@
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class HangmanEvilTest {
     private HangmanEvilSolution solution;
     private ArrayList<String> sampleWordSet;
+    private char letter;
+    private String word1;
+    private String word2;
+    private ArrayList<Integer> word1Index;
+    private ArrayList<Integer> word2Index;
 
     @BeforeEach
     public void init() {
         sampleWordSet = new ArrayList<>();
         sampleWordSet.add("apple");
         sampleWordSet.add("table");
-        sampleWordSet.add("chair");
         sampleWordSet.add("stone");
         sampleWordSet.add("bread");
-        sampleWordSet.add("fruit");
-        sampleWordSet.add("clock");
-        sampleWordSet.add("plant");
         sampleWordSet.add("house");
         sampleWordSet.add("water");
         sampleWordSet.add("smile");
-        sampleWordSet.add("laptop");
-        sampleWordSet.add("music");
         sampleWordSet.add("green");
-        sampleWordSet.add("cloud");
         sampleWordSet.add("paper");
-        sampleWordSet.add("light");
-        sampleWordSet.add("night");
         sampleWordSet.add("dream");
-        sampleWordSet.add("fight");
-//        ArrayList<String> containsE = new ArrayList<>();
-//        for (String word: wordSet){
-//            if (word.contains(Character.toString('e'))){
-//                containsE.add(word);
-//            }
-//        }
 
-        this.solution = new HangmanEvilSolution(sampleWordSet);
+        this.solution = new HangmanEvilSolution(5, sampleWordSet);
+
+        this.letter = 'e';
+        this.word1 = "dream";
+        this.word2 = "green";
+
+        this.word1Index = new ArrayList<>();
+        this.word1Index.add(2);
+
+        this.word2Index = new ArrayList<>();
+        this.word2Index.add(2);
+        this.word2Index.add(3);
+
+
 
     }
 
     @Test
-    public void testGetWordSet(){
+    public void testGetPossibleWords(){
         ArrayList<String> expected = sampleWordSet;
-        ArrayList<String> actual = solution.getWordSet();
+        ArrayList<String> actual = solution.getPossibleWords();
         assertEquals(expected, actual, "WordSet should be the same as the sampleWordSet");
+    }
+
+    @Test
+    public void testUpdateSolutionReturnTrue(){
+        boolean expected = true;
+        boolean actual = solution.updateSolution('e');
+        assertEquals(expected, actual, "updateGuess should return true.");
+    }
+
+    @Test
+    public void testUpdateSolutionReturnFalse(){
+        boolean expected = false;
+        boolean actual = solution.updateSolution('z');
+        assertEquals(expected, actual, "updateGuess should return false.");
     }
 
 
     // getWordFamily tests
     @Test
     public void testGetIndexesOfCharacterWithOneLetter() {
-        char c = 'e';
-        String word = "dream";
-
-        ArrayList<Integer> expected = new ArrayList<>();
-        expected.add(2);
-        ArrayList<Integer> actual = solution.getIndexesOfCharacter(c, word);
+        ArrayList<Integer> expected = word1Index;
+        ArrayList<Integer> actual = solution.getIndexesOfCharacter(letter, word1);
         assertEquals(expected, actual, "Indexes of 'e' in 'dream' is [2]");
     }
 
     @Test
     public void testGetIndexesOfCharacterWithTwoLetters() {
-        char c = 'e';
-        String word = "green";
-
-        ArrayList<Integer> expected = new ArrayList<>();
-        expected.add(2);
-        expected.add(3);
-        ArrayList<Integer> actual = solution.getIndexesOfCharacter(c, word);
+        ArrayList<Integer> expected = word2Index;
+        ArrayList<Integer> actual = solution.getIndexesOfCharacter(letter, word2);
         assertEquals(expected, actual, "Indexes of 'e' in 'green' is [2, 3]");
     }
 
     @Test
     public void testCreatePartialSolutionWithOneLetter(){
-        int length = 5;
-        char c = 'e';
-        String word = "dream";
-        ArrayList<Integer> indexes = new ArrayList<>();
-        indexes.add(2);
-
         String expected = "--e--";
-        String actual = solution.createPartialSolution(length, c, indexes);
+        String actual = solution.createPartialSolution(letter, word1Index);
         assertEquals(expected, actual, "Partial solution should be --e--");
     }
 
     @Test
     public void testCreatePartialSolutionWithTwoLetters(){
-        int length = 5;
-        char c = 'e';
-        String word = "green";
-        ArrayList<Integer> indexes = new ArrayList<>();
-        indexes.add(2);
-        indexes.add(3);
-
         String expected = "--ee-";
-        String actual = solution.createPartialSolution(length, c, indexes);
+        String actual = solution.createPartialSolution(letter, word2Index);
         assertEquals(expected, actual, "Partial solution should be --ee-");
     }
-//
-//    @Test
-//    public void testCreatePartialSolution() {
-//        char c = 'e';
-//        HashSet<String> expectedKeys = new HashSet<>();
-//        expectedKeys.add("----e");
-//        double expected = input1.length();
-//        double actual = solution.
-//        assertEquals(expected, actual, "Similarity should be length of the word.");
-//    }
+
+
+
+    @Test
+    public void testIsSolved(){
+        boolean expected = false;
+        boolean actual = solution.isSolved();
+        assertEquals(expected, actual, "isSolved should be false.");
+    }
+
+
+
 }

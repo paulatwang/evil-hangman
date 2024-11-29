@@ -1,7 +1,5 @@
-import java.sql.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 
 public class HangmanEvilSolution {
     private final int WORD_LENGTH;
@@ -15,7 +13,7 @@ public class HangmanEvilSolution {
         this.display = updateDisplay("_".repeat(WORD_LENGTH));
     }
 
-    public boolean updateGuess(char guessedLetter){
+    public boolean updateSolution(char guessedLetter){
         // initialize new wordFamily
         HashMap<String, ArrayList<String>> wordFamily = new HashMap<>();
 
@@ -45,17 +43,6 @@ public class HangmanEvilSolution {
         return true;
     }
 
-    private ArrayList<Character> updateDisplay(String newOutput){
-        ArrayList<Character> updated = new ArrayList<>();
-        for (char c : newOutput.toCharArray()){
-            if (c == '-'){
-                updated.add('_');
-            } else {
-                updated.add(c);
-            }
-        }
-        return updated;
-    }
 
     // This method returns the key of the longest value in wordFamily
     private String getLongestWordFamily(HashMap<String, ArrayList<String>> wordFamily){
@@ -72,7 +59,7 @@ public class HangmanEvilSolution {
     }
 
     // This method iterates over the string and find all occurrences of a target character
-    private ArrayList<Integer> getIndexesOfCharacter(char targetChar, String str){
+    public ArrayList<Integer> getIndexesOfCharacter(char targetChar, String str){
         ArrayList<Integer> indexes = new ArrayList<>();
         for (int i = 0; i < str.length(); i++) {
             if (str.charAt(i) == targetChar) {
@@ -85,7 +72,7 @@ public class HangmanEvilSolution {
     // This method returns a String consisting of the partial solution
     // inputs: letter, listOfPositions
     // outputs: String (e.g., "--e--")
-    private String createPartialSolution (char letter, ArrayList<Integer> listOfPositions){
+    public String createPartialSolution (char letter, ArrayList<Integer> listOfPositions){
         ArrayList<Character> partialSolution = new ArrayList<>(this.display);
 
         for (int idx : listOfPositions){ // update partial solution with new letters
@@ -105,7 +92,17 @@ public class HangmanEvilSolution {
         return sb.toString();
     }
 
-
+    private ArrayList<Character> updateDisplay(String newOutput){
+        ArrayList<Character> updated = new ArrayList<>();
+        for (char c : newOutput.toCharArray()){
+            if (c == '-'){
+                updated.add('_');
+            } else {
+                updated.add(c);
+            }
+        }
+        return updated;
+    }
     public void printProgress(){
         for (char c : display) {
             System.out.print(c + " ");
@@ -125,7 +122,4 @@ public class HangmanEvilSolution {
     public ArrayList<String> getPossibleWords(){
         return possibleWords;
     }
-
-
-
 }

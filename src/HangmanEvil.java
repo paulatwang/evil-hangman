@@ -1,50 +1,54 @@
-import java.io.FileInputStream;
-import java.io.IOException;
 import java.util.*;
 
 public class HangmanEvil {
-    private HashMap<Integer, ArrayList<String>> wordList;
-    private HashSet<Character> previousGuesses;
-    private TreeSet<Character> incorrectGuesses;
+
     private HangmanEvilSolution solution;
     private Scanner inputScanner;
+    private ArrayList<Character> display;
+    private int WORD_LENGTH;
+    private HashSet<Character> previousGuesses;
+    private TreeSet<Character> incorrectGuesses;
 
     public HangmanEvil() {
         this("engDictionary.txt");
     }
 
     public HangmanEvil(String filename) {
-        try {
-            wordList = dictionaryToList(filename);
-        } catch (IOException e) {
-            System.out.printf(
-                    "Couldn't read from the file %s. Verify that you have it in the right place and try running again. \n",
-                    filename);
-            e.printStackTrace();
-            System.exit(0);
-        }
+        // Load dictionary and read as wordList
+        FileIO fileio = new FileIO();
+        fileio.loadDictionary(filename);
+        HashMap<Integer, ArrayList<String>> wordList = fileio.getWordList();
 
+        // Setup empty guesses
         this.previousGuesses = new HashSet<>();
         this.incorrectGuesses = new TreeSet<>();
+
+        // Setup user input scanner
         this.inputScanner = new Scanner(System.in);
 
-        int randomLength = new Random().nextInt(wordList.size());
-        this.solution = new HangmanEvilSolution(randomLength, wordList.get(randomLength));
+        // Setup solution
+        WORD_LENGTH = new Random().nextInt(wordList.size());
+        this.solution = new HangmanEvilSolution(WORD_LENGTH, wordList.get(WORD_LENGTH));
+
     }
 
 
     public void start(){
         while (!solution.isSolved()){
             char guess = promptForGuess();
-            previousGuesses.add(guess);
-            boolean containsLetter = solution.updateGuess(guess);
-            if (!containsLetter){
-                incorrectGuesses.add(guess);
-            }
+            addGuess(guess);
+
         }
         printVictory();
     }
 
+    private void addGuess(char guess){
+        previousGuesses.add(guess);
+        boolean containsLetter = solution.updateSolution(guess);
+        if (!containsLetter){
+            incorrectGuesses.add(guess);
+        }
+    }
 
     private char promptForGuess() {
         while (true) {
@@ -66,19 +70,10 @@ public class HangmanEvil {
         System.out.printf("Congrats! The word was %s%n", solution.getPossibleWords().get(0));
     }
 
-    private static HashMap<Integer, ArrayList<String>> dictionaryToList(String filename) throws IOException {
-        FileInputStream fs = new FileInputStream(filename);
-        Scanner scnr = new Scanner(fs);
 
-        HashMap<Integer, ArrayList<String>> wordList = new HashMap<>();
-        while (scnr.hasNext()) {
-            String word = scnr.next();
-            int length = word.length();
-            wordList.putIfAbsent(length, new ArrayList<>()); // if no key-value pair exists, add it
-            wordList.get(length).add(word); // add word to int key
-        }
-        return wordList;
-    }
+
+
+
 
 
 
