@@ -45,3 +45,4 @@ This program implements low cohesion given that:
 - Only the HangmanEvil class relies on FileIO and HangmanEvilSolution
 
 #### Git Commits
+<img width="1369" alt="Screenshot 2024-11-29 at 12 32 27" src="https://github.com/user-attachments/assets/83230e4a-613a-4657-9a18-04e57837ce6c">
