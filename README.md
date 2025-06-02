@@ -1,7 +1,3 @@
-# CIT 591 Homework 6 - Evil Hangman
-
-Completed alone.
-
 This program is a twist on the traditional Hangman game. In Hangman, the word that the user is trying to guess is fixed before they start playing. In Evil Hangman, the program maintains a set of words that match the pattern of correctly provided letters so far, but does not commit to any particular word in advance. If a user guesses a letter, the program will choose to assign that letter to the location(s) in the partial solution that leaves the most potential matches remaining. It might be the case that leaving the letter out keeps the most options open; in that case, you’d report the letter as being an incorrect guess.
 
 #### Tools for completing this assignment
@@ -44,5 +40,3 @@ This program implements low cohesion given that:
 - FileIO and HangmanEvilSolution classes are entirely independent from one another
 - Only the HangmanEvil class relies on FileIO and HangmanEvilSolution
 
-#### Git Commits
-<img width="1369" alt="Screenshot 2024-11-29 at 12 32 27" src="https://github.com/user-attachments/assets/83230e4a-613a-4657-9a18-04e57837ce6c">
